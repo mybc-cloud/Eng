@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大学英语单元练习题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        correct: '#10b981',
+                        incorrect: '#ef4444',
+                        primary: '#3b82f6',
+                        neutral: {
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            800: '#1f2937',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .option-hover {
+                @apply transition-all duration-200 hover:bg-neutral-100 active:scale-[0.98];
+            }
+            .btn-hover {
+                @apply transition-all duration-200 hover:opacity-90 active:scale-[0.97];
+            }
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen font-sans text-neutral-800">
+    <div class="max-w-md mx-auto px-4 py-6">
+        <!-- 题目卡片 -->
+        <div class="bg-white rounded-lg">
+            <!-- 题型和单元信息 -->
+            <div class="mb-6">
+                <h2 class="text-[clamp(1.25rem,3vw,1.5rem)] font-bold mb-2">单选题</h2>
+                <p id="question-unit" class="text-[clamp(0.9rem,2vw,1rem)] text-neutral-500 mb-1"></p>
+                <p id="question-number" class="text-[clamp(1rem,2.5vw,1.125rem)]"></p>
+            </div>
+
+            <!-- 题目内容 -->
+            <div id="question-text" class="text-[clamp(1rem,2.5vw,1.125rem)] mb-8 leading-relaxed"></div>
+
+            <!-- 选项列表 -->
+            <div id="options-container" class="space-y-4 mb-8"></div>
+
+            <!-- 答案反馈区域 -->
+            <div id="answer-feedback" class="hidden mb-6">
+                <div class="border-t border-neutral-200 pt-4">
+                    <p id="correct-answer" class="text-[clamp(1rem,2.5vw,1.125rem)] mb-2"></p>
+                    <div class="mt-4">
+                        <h3 class="text-[clamp(1rem,2.5vw,1.125rem)] font-medium text-neutral-500 mb-2">解题思路：</h3>
+                        <p id="explanation-text" class="text-[clamp(0.95rem,2.5vw,1rem)] text-neutral-600 leading-relaxed whitespace-pre-line"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航按钮 -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 px-4 py-3 flex justify-between items-center max-w-md mx-auto">
+            <button id="prev-btn" class="text-primary px-4 py-2 rounded-md btn-hover disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fa fa-chevron-left mr-1"></i> 上一题
+            </button>
+            <button id="next-btn" class="bg-primary text-white px-6 py-2 rounded-md btn-hover disabled:opacity-50 disabled:cursor-not-allowed">
+                下一题 <i class="fa fa-chevron-right ml-1"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 题目数据 - 已更新为大学英语单元练习题
+        const questions = [
+            // Unit 1 课后第3题
+            {
+                unit: "Unit 1 课后第3题",
+                id: 1,
+                text: "The guest speaker decided to ______ his speech in order to leave enough time for his audience to ask questions.",
+                options: [
+                    { id: "A", text: "condense" },
+                    { id: "B", text: "device" },
+                    { id: "C", text: "launch" },
+                    { id: "D", text: "appeal" }
+                ],
+                correctAnswer: "A",
+                explanation: "① 词性判断：decide to do sth.（决定做某事）后接动词原形，B选项device是名词（装置），直接排除；\n② 词义辨析：condense（精简，压缩）；launch（发射；发起）；appeal（呼吁；吸引）；\n③ 句意：演讲者决定精简演讲稿，留出时间供观众提问，结合语义选A。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 2,
+                text: "According to the media, China's wind power capacity has ______ the previous level considerably.",
+                options: [
+                    { id: "A", text: "offended" },
+                    { id: "B", text: "inferred" },
+                    { id: "C", text: "exceeded" },
+                    { id: "D", text: "conducted" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：offend（冒犯）；infer（推断）；exceed（超过，超越）；conduct（实施，开展）。exceed the level为常用搭配，表示“超越水平”。句意为：据媒体报道，中国风电装机容量已大幅超越以往水平，故选C。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 3,
+                text: "Researchers conducted a set of psychological tests to determine the negative consequences of a sleep ______.",
+                options: [
+                    { id: "A", text: "bid" },
+                    { id: "B", text: "deficit" },
+                    { id: "C", text: "jerk" },
+                    { id: "D", text: "span" }
+                ],
+                correctAnswer: "B",
+                explanation: "固定搭配+词义辨析：sleep deficit是固定短语，意为“睡眠不足”；bid（出价）；jerk（猛拉）；span（跨度）。句意为：研究人员开展心理测试，探究睡眠不足带来的负面影响，故选B。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 4,
+                text: "In addition to a sense of sight, bees also have an unusual sense of smell, so they can ______ more than 10 similar flower odors.",
+                options: [
+                    { id: "A", text: "tune" },
+                    { id: "B", text: "oblige" },
+                    { id: "C", text: "focus" },
+                    { id: "D", text: "distinguish" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：tune（调音；调整）；oblige（迫使；帮忙）；focus（聚焦）；distinguish（区分，辨别）。结合“蜜蜂嗅觉灵敏”的语境，此处指辨别花香，故选D。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 5,
+                text: "Moving forward even in the face of great difficulties has become the most important ______ in my life and career.",
+                options: [
+                    { id: "A", text: "input" },
+                    { id: "B", text: "assign" },
+                    { id: "C", text: "proof" },
+                    { id: "D", text: "asset" }
+                ],
+                correctAnswer: "D",
+                explanation: "① 词性判断：形容词important后接名词，B选项assign是动词（分配），排除；\n② 词义辨析：input（投入）；proof（证据）；asset（宝贵的品质/财富）；\n③ 句意：直面困难、勇往直前是人生和职场中最宝贵的财富，故选D。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 6,
+                text: "The lawyer proclaimed that they couldn't jump to conclusions because acceptable conclusions must be supported by ______ evidence.",
+                options: [
+                    { id: "A", text: "adequate" },
+                    { id: "B", text: "fluent" },
+                    { id: "C", text: "adequately" },
+                    { id: "D", text: "fluently" }
+                ],
+                correctAnswer: "C",
+                explanation: "① 语法考点：修饰动词supported需使用副词，A、B为形容词，直接排除；\n② 词义辨析：adequately（充分地）；fluently（流利地）；\n③ 句意：合理的结论必须有充分的证据支撑，故选C。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 7,
+                text: "To help the employees become more communicative, the company offered several workshops to those who were not ______ in social interactions.",
+                options: [
+                    { id: "A", text: "impulsive" },
+                    { id: "B", text: "competent" },
+                    { id: "C", text: "visual" },
+                    { id: "D", text: "automatic" }
+                ],
+                correctAnswer: "B",
+                explanation: "固定搭配+词义辨析：be competent in表示“在……方面有能力”；impulsive（冲动的）；visual（视觉的）；automatic（自动的）。句意为：公司为社交能力不足的员工开设交流课程，故选B。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 8,
+                text: "Some parents try to help solve the problems that their sons and daughters have in ______ to their college life.",
+                options: [
+                    { id: "A", text: "adopt" },
+                    { id: "B", text: "adopting" },
+                    { id: "C", text: "adjust" },
+                    { id: "D", text: "adjusting" }
+                ],
+                correctAnswer: "D",
+                explanation: "① 语法考点：介词in后接动名词形式，排除动词原形A、C；\n② 短语辨析：adjust to（适应）；adopt（采纳；收养），无adopt to搭配；\n③ 句意：父母帮孩子解决适应大学生活时遇到的问题，故选D。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 9,
+                text: "China's series of ______ measures have proved to be effective for a steady economic recovery despite difficulties.",
+                options: [
+                    { id: "A", text: "precise" },
+                    { id: "B", text: "artificial" },
+                    { id: "C", text: "dumb" },
+                    { id: "D", text: "sour" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：precise（精准的）；artificial（人造的）；dumb（愚蠢的）；sour（酸的；刻薄的）。precise measures表示“精准举措”，结合“经济复苏”的语境，选A。"
+            },
+            {
+                unit: "Unit 1 课后第3题",
+                id: 10,
+                text: "The Italian businessman spoke fluent Chinese and demonstrated his Chinese ______ at the World Expo held in Shanghai.",
+                options: [
+                    { id: "A", text: "subjunctive" },
+                    { id: "B", text: "proficiency" },
+                    { id: "C", text: "bid" },
+                    { id: "D", text: "quotation" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：subjunctive（虚拟语气）；proficiency（（语言）熟练度，精通）；bid（出价）；quotation（引用）。language proficiency为固定搭配“语言水平”，句意为：这位商人展示了自己的中文水平，故选B。"
+            },
+            
+            // Unit 1 课文第6题
+            {
+                unit: "Unit 1 课文第6题",
+                id: 11,
+                text: "In Chinese culture, adult children are expected to take care of their aged parents, so they ______ contact or visit their parents regularly.",
+                options: [
+                    { id: "A", text: "turn to" },
+                    { id: "B", text: "focus on" },
+                    { id: "C", text: "appeal to" },
+                    { id: "D", text: "are obliged to" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：turn to（求助于）；focus on（专注于）；appeal to（吸引；呼吁）；be obliged to（有义务）。结合“中国文化中子女赡养老人”的背景，此处指有义务定期看望父母，故选D。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 12,
+                text: "Most of the time, people don't really care about natural disasters and won't ______ avoiding them till they are personally affected by one.",
+                options: [
+                    { id: "A", text: "get hold of" },
+                    { id: "B", text: "run away from" },
+                    { id: "C", text: "get serious about" },
+                    { id: "D", text: "stand up for" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：get hold of（抓住；得到）；run away from（逃离）；get serious about（认真对待）；stand up for（支持）。句意为：人们只有亲身遭遇灾害，才会认真学习防灾知识，故选C。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 13,
+                text: "When you ______ a friend that you haven't seen for a long time and have a good chat with him or her, you will surely be delighted.",
+                options: [
+                    { id: "A", text: "turn into" },
+                    { id: "B", text: "run into" },
+                    { id: "C", text: "fall into" },
+                    { id: "D", text: "get into" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：turn into（变成）；run into（偶然遇见）；fall into（陷入）；get into（进入；养成）。结合“许久未见的朋友”，此处指偶遇老友，故选B。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 14,
+                text: "While reading, we need to ______ facts and opinions in order to have a better and more accurate comprehension.",
+                options: [
+                    { id: "A", text: "distinguish between" },
+                    { id: "B", text: "turn out" },
+                    { id: "C", text: "wonder at" },
+                    { id: "D", text: "back off" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：distinguish between（区分……）；turn out（结果是）；wonder at（对……感到惊讶）；back off（后退，退缩）。阅读时需要区分事实与观点，故选A。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 15,
+                text: "The growth of the food e-commerce sector in China has played an important role in promoting the sales of agricultural products ______ the fields.",
+                options: [
+                    { id: "A", text: "hear from" },
+                    { id: "B", text: "fresh from" },
+                    { id: "C", text: "result from" },
+                    { id: "D", text: "distinct from" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：hear from（收到来信）；fresh from（刚从……来的，新鲜的）；result from（由……引起）；distinct from（与……不同）。fresh from the fields表示“田间新鲜采摘的”，修饰农产品，故选B。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 16,
+                text: "If I don't like someone or something, I might just say I ______ them, even though it sounds a little rude.",
+                options: [
+                    { id: "A", text: "am fond of" },
+                    { id: "B", text: "am curious about" },
+                    { id: "C", text: "am allergic to" },
+                    { id: "D", text: "am good at" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：be fond of（喜欢）；be curious about（好奇）；be allergic to（对……过敏；十分讨厌）；be good at（擅长）。口语中常用be allergic to委婉表达“讨厌某人/某物”，故选C。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 17,
+                text: "When the topic was discussed, I quickly ______ because I am not good at things like math and analytical skills.",
+                options: [
+                    { id: "A", text: "paid off" },
+                    { id: "B", text: "gave back" },
+                    { id: "C", text: "looked up" },
+                    { id: "D", text: "got lost" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：pay off（得到回报）；give back（归还）；look up（查阅；抬头）；get lost（跟不上思路；困惑）。句意为：讨论偏数理分析话题时，我很快就听不懂了，故选D。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 18,
+                text: "It is hoped that some companies will ______ this small old town to invest and build factories.",
+                options: [
+                    { id: "A", text: "become attracted to" },
+                    { id: "B", text: "get rid of" },
+                    { id: "C", text: "be disappointed with" },
+                    { id: "D", text: "run out of" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：become attracted to（被……吸引）；get rid of（摆脱）；be disappointed with（对……失望）；run out of（用完）。句意为：希望企业被这座古镇吸引，前来投资建厂，故选A。"
+            },
+            {
+                unit: "Unit 1 课文第6题",
+                id: 19,
+                text: "The Tang Dynasty is ______ a golden age in Chinese history, when Chinese culture spread across much of Asia.",
+                options: [
+                    { id: "A", text: "gifted with" },
+                    { id: "B", text: "looked upon as" },
+                    { id: "C", text: "missed out on" },
+                    { id: "D", text: "deceived into" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：be gifted with（天生具有）；be looked upon as（被视作）；miss out on（错过）；be deceived into（被骗做某事）。be looked upon as a golden age表示“被视为黄金时代”，符合历史常识，故选B。"
+            },
+            
+            // Unit 2 课后第3题
+            {
+                unit: "Unit 2 课后第3题",
+                id: 20,
+                text: "With the global fight against poverty still continuing, many countries are looking to draw inspiration from China's ______ experience.",
+                options: [
+                    { id: "A", text: "prolonged" },
+                    { id: "B", text: "prolong" },
+                    { id: "C", text: "prolonging" },
+                    { id: "D", text: "having prolonged" }
+                ],
+                correctAnswer: "A",
+                explanation: "① 语法考点：空格修饰名词fight（斗争），需使用形容词；\n② 词性辨析：prolong（v. 延长）；prolonged（adj. 长期的，持续已久的）；\n③ 句意：全球长期的减贫斗争仍在继续，故选A。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 21,
+                text: "According to the news ______, her interest in writing about plants and animals came from her childhood.",
+                options: [
+                    { id: "A", text: "fairy" },
+                    { id: "B", text: "release" },
+                    { id: "C", text: "scope" },
+                    { id: "D", text: "barrier" }
+                ],
+                correctAnswer: "B",
+                explanation: "固定搭配+词义辨析：news release为固定短语，意为“新闻稿”；fairy（仙女）；scope（范围）；barrier（障碍）。结合语境选B。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 22,
+                text: "Many of them are beginners who have never done painting before and are looking to develop their ______ interests.",
+                options: [
+                    { id: "A", text: "weird" },
+                    { id: "B", text: "vivid" },
+                    { id: "C", text: "artistic" },
+                    { id: "D", text: "obsessed" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：weird（怪异的）；vivid（生动的）；artistic（艺术的）；obsessed（痴迷的）。前文提到painting（绘画），属于艺术范畴，artistic interests表示“艺术爱好”，故选C。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 23,
+                text: "Consumers are increasingly comfortable shopping using their mobile devices, with 69 percent of people ______ and shopping online last year.",
+                options: [
+                    { id: "A", text: "browse" },
+                    { id: "B", text: "browsed" },
+                    { id: "C", text: "browsing" },
+                    { id: "D", text: "to browse" }
+                ],
+                correctAnswer: "C",
+                explanation: "语法考点：with+名词+非谓语动词的复合结构。people与browse（浏览）是主动关系，用现在分词browsing，故选C。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 24,
+                text: "The tourists were awestruck at the ______ of the Great Wall, the building of which started as early as the seventh century B.C.E.",
+                options: [
+                    { id: "A", text: "spectrum" },
+                    { id: "B", text: "minor" },
+                    { id: "C", text: "residence" },
+                    { id: "D", text: "magnificence" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：spectrum（光谱；范围）；minor（次要的人/物）；residence（住宅）；magnificence（宏伟，壮丽）。游客惊叹于长城的宏伟，故选D。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 25,
+                text: "As we know, earlier diagnosis can give better treatment ______ to patients, which will also help them get effective care.",
+                options: [
+                    { id: "A", text: "plots" },
+                    { id: "B", text: "versions" },
+                    { id: "C", text: "options" },
+                    { id: "D", text: "applicants" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：plots（情节；阴谋）；versions（版本）；options（选择，方案）；applicants（申请人）。treatment options为固定搭配“治疗方案”，句意为：早期诊断能为患者提供更多治疗选择，故选C。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 26,
+                text: "Some clinics require people to call the front desk to ______ their appointments before they come to see the doctors.",
+                options: [
+                    { id: "A", text: "reform" },
+                    { id: "B", text: "confirm" },
+                    { id: "C", text: "invest" },
+                    { id: "D", text: "penetrate" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：reform（改革）；confirm（确认）；invest（投资）；penetrate（穿透）。confirm appointments是常用搭配“预约确认”，就医前需要确认预约，故选B。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 27,
+                text: "The website is reliable because I've made dozens of purchases from this very ______ site with zero problems.",
+                options: [
+                    { id: "A", text: "reputable" },
+                    { id: "B", text: "liable" },
+                    { id: "C", text: "inevitable" },
+                    { id: "D", text: "variable" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：reputable（信誉良好的）；liable（有责任的；易……的）；inevitable（不可避免的）；variable（多变的）。前文提到reliable（可靠的），对应“信誉好的网站”，故选A。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 28,
+                text: "\"What do you think the author meant when …?\" is a common book club question, which ______ serious analysis of a topic.",
+                options: [
+                    { id: "A", text: "reclaims" },
+                    { id: "B", text: "provokes" },
+                    { id: "C", text: "persists" },
+                    { id: "D", text: "fakes" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：reclaim（回收；开垦）；provoke（引发，激起）；persist（坚持）；fake（伪造）。这类问题会引发深度讨论与分析，故选B。"
+            },
+            {
+                unit: "Unit 2 课后第3题",
+                id: 29,
+                text: "Just as we all admire heroes, we look to others for inspiration and ______, but change has to start with you, as an individual.",
+                options: [
+                    { id: "A", text: "exploration" },
+                    { id: "B", text: "foundation" },
+                    { id: "C", text: "aspiration" },
+                    { id: "D", text: "tradition" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：exploration（探索）；foundation（基础）；aspiration（抱负，志向）；tradition（传统）。inspiration and aspiration表示“灵感与理想”，符合句意，故选C。"
+            },
+            
+            // Unit 2 课文第6题
+            {
+                unit: "Unit 2 课文第6题",
+                id: 30,
+                text: "When I first saw the scenery of Mount Huangshan, I was ______: the fascinating pine trees, the spectacular peaks, and the fairyland of clouds and mists.",
+                options: [
+                    { id: "A", text: "in awe" },
+                    { id: "B", text: "in person" },
+                    { id: "C", text: "in addition" },
+                    { id: "D", text: "in advance" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：in awe（惊叹，敬畏）；in person（亲自）；in addition（此外）；in advance（提前）。黄山景色优美，让人惊叹，故选A。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 31,
+                text: "The group discussion became heated, with creative ideas and suggestions ______ from time to time.",
+                options: [
+                    { id: "A", text: "put out" },
+                    { id: "B", text: "thrown out" },
+                    { id: "C", text: "left out" },
+                    { id: "D", text: "worn out" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：put out（扑灭；出版）；throw out（提出（想法/建议））；leave out（遗漏）；wear out（疲惫；磨损）。小组讨论中不断有人提出创意想法，故选B。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 32,
+                text: "Whenever there is a chance we can help these children, we make a top effort and don't want to ______.",
+                options: [
+                    { id: "A", text: "help themselves" },
+                    { id: "B", text: "raise them up" },
+                    { id: "C", text: "let them down" },
+                    { id: "D", text: "speak highly of them" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：help themselves（自助）；raise them up（抚养）；let them down（让某人失望）；speak highly of them（高度评价）。我们尽全力帮忙，不想让孩子们失望，故选C。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 33,
+                text: "Science is not my profession, so if you want to discuss it, you could ______ other people here who know science better than me.",
+                options: [
+                    { id: "A", text: "make the brains of" },
+                    { id: "B", text: "take the brains of" },
+                    { id: "C", text: "see the brains of" },
+                    { id: "D", text: "pick the brains of" }
+                ],
+                correctAnswer: "D",
+                explanation: "固定搭配：pick the brains of sb. 是英语习语，意为“向行家请教、讨教”，其余选项均无此搭配，结合语境选D。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 34,
+                text: "I draw inspiration from many teachers who are ______ their work and try to spread their enthusiasm to their students.",
+                options: [
+                    { id: "A", text: "shy of" },
+                    { id: "B", text: "free from" },
+                    { id: "C", text: "concerned in" },
+                    { id: "D", text: "passionate about" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：be shy of（回避）；be free from（免受……影响）；be concerned in（参与）；be passionate about（对……充满热情）。此处形容老师热爱本职工作，故选D。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 35,
+                text: "If you feel that your grades or your study skills are ______, you may turn to your teachers for advice.",
+                options: [
+                    { id: "A", text: "not up to bar" },
+                    { id: "B", text: "not up to tar" },
+                    { id: "C", text: "not up to par" },
+                    { id: "D", text: "not up to war" }
+                ],
+                correctAnswer: "C",
+                explanation: "固定习语：not up to par 为固定表达，意为“未达到标准、表现不佳”，其余选项均为错误搭配，结合“成绩和学习能力不足”的语境选C。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 36,
+                text: "I had never been to this restaurant before, but it ______ fantastic not only because of its delicious food but also the wonderful service.",
+                options: [
+                    { id: "A", text: "worked out" },
+                    { id: "B", text: "turned out" },
+                    { id: "C", text: "figured out" },
+                    { id: "D", text: "looked out" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：work out（解决；锻炼）；turn out（结果是，证明是）；figure out（弄明白）；look out（小心）。句意为：这家店最终被证实体验极佳，故选B。"
+            },
+            {
+                unit: "Unit 2 课文第6题",
+                id: 37,
+                text: "If one is always ______ money, appearance, and social status, they will unfortunately forget what is most important in their life.",
+                options: [
+                    { id: "A", text: "obsessed with" },
+                    { id: "B", text: "similar to" },
+                    { id: "C", text: "capable of" },
+                    { id: "D", text: "bound for" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：be obsessed with（痴迷于）；be similar to（与……相似）；be capable of（能够）；be bound for（前往）。句意：一味沉迷于金钱、外表和地位，会迷失生活本质，故选A。"
+            },
+            
+            // Unit 3 课后第3题
+            {
+                unit: "Unit 3 课后第3题",
+                id: 38,
+                text: "The boss said, \"The schedule is completely ______ because I do not need to be around and watch when you do your work.\"",
+                options: [
+                    { id: "A", text: "flexible" },
+                    { id: "B", text: "artificial" },
+                    { id: "C", text: "visual" },
+                    { id: "D", text: "internal" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：flexible（灵活的）；artificial（人造的）；visual（视觉的）；internal（内部的）。老板无需监督，说明时间表安排很灵活，故选A。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 39,
+                text: "Currently, the stock market is not very stable, but over the long run, the growth of stock funds will ______ the growth of the economy.",
+                options: [
+                    { id: "A", text: "condemn" },
+                    { id: "B", text: "parallel" },
+                    { id: "C", text: "resound" },
+                    { id: "D", text: "isolate" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：condemn（谴责）；parallel（与……同步、相当）；resound（回响）；isolate（隔离）。句意为：长期来看，基金走势会和经济增长同步，故选B。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 40,
+                text: "These student volunteers can decide how to perform any work ______, for which they are qualified and have a strong passion.",
+                options: [
+                    { id: "A", text: "assigning" },
+                    { id: "B", text: "assign" },
+                    { id: "C", text: "assigned" },
+                    { id: "D", text: "being assigned" }
+                ],
+                correctAnswer: "C",
+                explanation: "语法考点：work（工作）和assign（分配）是被动关系，用过去分词assigned作定语，assigned work表示“分配的工作”，故选C。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 41,
+                text: "Human beings, by providing environmental enrichment, encourage animals to explore, interact, and ______ natural behaviors.",
+                options: [
+                    { id: "A", text: "exhibit" },
+                    { id: "B", text: "infer" },
+                    { id: "C", text: "prohibit" },
+                    { id: "D", text: "prefer" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：exhibit（展现，表现）；infer（推断）；prohibit（禁止）；prefer（偏爱）。丰富环境能让动物展现本能行为，故选A。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 42,
+                text: "Along with extraordinary courage, qualities like ______, teamwork, and most importantly, leadership shine in all of our student activities.",
+                options: [
+                    { id: "A", text: "indifference" },
+                    { id: "B", text: "discrimination" },
+                    { id: "C", text: "individualism" },
+                    { id: "D", text: "persistence" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：indifference（冷漠）；discrimination（歧视）；individualism（个人主义）；persistence（毅力，坚持）。结合语境，此处列举优秀品质，毅力符合要求，故选D。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 43,
+                text: "This is a beautiful part of the city to live in, with stylish and architecturally historic buildings lining the ______ clean and quiet streets.",
+                options: [
+                    { id: "A", text: "ironical" },
+                    { id: "B", text: "stunning" },
+                    { id: "C", text: "incidental" },
+                    { id: "D", text: "perceptive" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：ironical（讽刺的）；stunning（令人惊艳的）；incidental（偶然的）；perceptive（有洞察力的）。形容古建筑风格精美、令人赞叹，故选B。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 44,
+                text: "An energetic search will soon be put in place to ______ a qualified person who can continue with the leadership of a big company.",
+                options: [
+                    { id: "A", text: "venture" },
+                    { id: "B", text: "label" },
+                    { id: "C", text: "recruit" },
+                    { id: "D", text: "illustrate" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：venture（冒险）；label（贴标签）；recruit（招聘，物色人才）；illustrate（举例说明）。公司寻找继任管理者，属于招聘人才，故选C。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 45,
+                text: "I've ______ hardships throughout my life, so I think I can handle the stress and achieve my full potential in this company.",
+                options: [
+                    { id: "A", text: "resented" },
+                    { id: "B", text: "saddled" },
+                    { id: "C", text: "transferred" },
+                    { id: "D", text: "endured" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：resent（怨恨）；saddle（使背负负担）；transfer（转移）；endure（经历，忍受）。endure hardships表示“历经磨难”，符合句意，故选D。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 46,
+                text: "Many people believe that ______ exercise and outdoor sports could better help people stay healthy and strong.",
+                options: [
+                    { id: "A", text: "vigorous" },
+                    { id: "B", text: "acid" },
+                    { id: "C", text: "remote" },
+                    { id: "D", text: "outward" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：vigorous（高强度的，剧烈的）；acid（酸的）；remote（遥远的）；outward（向外的）。vigorous exercise为固定搭配“体育锻炼、高强度运动”，故选A。"
+            },
+            {
+                unit: "Unit 3 课后第3题",
+                id: 47,
+                text: "With the help of my family and friends, all of my ______ doubts about myself gradually disappeared and my confidence was restored.",
+                options: [
+                    { id: "A", text: "sparkling" },
+                    { id: "B", text: "internal" },
+                    { id: "C", text: "tender" },
+                    { id: "D", text: "faithful" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：sparkling（闪闪发光的）；internal（内心的）；tender（温柔的）；faithful（忠诚的）。internal doubts表示“内心的自我怀疑”，故选B。"
+            },
+            
+            // Unit 3 课文第6题
+            {
+                unit: "Unit 3 课文第6题",
+                id: 48,
+                text: "The course project that I completed weeks ago has helped me ______ my creativity and intuition which I didn't even realize I had.",
+                options: [
+                    { id: "A", text: "look into" },
+                    { id: "B", text: "turn into" },
+                    { id: "C", text: "tap into" },
+                    { id: "D", text: "burst into" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：look into（调查）；turn into（变成）；tap into（挖掘（潜能））；burst into（突然爆发）。项目帮助我挖掘自身的创造力和直觉，故选C。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 49,
+                text: "Many people probably ______ fast Internet access is almost everywhere – at home, at work, and even in the most remote areas.",
+                options: [
+                    { id: "A", text: "take for granted that" },
+                    { id: "B", text: "take it for granting that" },
+                    { id: "C", text: "take it granting that" },
+                    { id: "D", text: "take it for granted that" }
+                ],
+                correctAnswer: "D",
+                explanation: "固定句型：take it for granted that... 为经典句型，意为“认为……是理所当然的”，其中it作形式宾语，其余选项均为语法错误，故选D。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 50,
+                text: "It's probably true that we always ______ the goal that we consider challenging but achievable to gain a sense of accomplishment.",
+                options: [
+                    { id: "A", text: "strive for" },
+                    { id: "B", text: "provide for" },
+                    { id: "C", text: "apply for" },
+                    { id: "D", text: "take for" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：strive for（努力争取）；provide for（供养）；apply for（申请）；take for（把……当作）。我们努力争取目标以获得成就感，故选A。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 51,
+                text: "It's ______ to say that the kitchen he installed last month is 100 times better, and now I fortunately have the kitchen I dreamed of.",
+                options: [
+                    { id: "A", text: "no attention" },
+                    { id: "B", text: "no exaggeration" },
+                    { id: "C", text: "no competition" },
+                    { id: "D", text: "no expiration" }
+                ],
+                correctAnswer: "B",
+                explanation: "固定搭配：It's no exaggeration to say that... 意为“毫不夸张地说……”，其余搭配均不成立，结合句意选B。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 52,
+                text: "Since the exam ______ what you have learned, you can expect to see some questions from previous assignments.",
+                options: [
+                    { id: "A", text: "is amazed at" },
+                    { id: "B", text: "is crazy about" },
+                    { id: "C", text: "is based on" },
+                    { id: "D", text: "is depicted as" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：be amazed at（惊讶于）；be crazy about（痴迷于）；be based on（基于）；be depicted as（被描绘成）。考试内容基于平日所学，故选C。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 53,
+                text: "I think journalists work in a timely manner and ______ daily deadlines or tight working schedules because they were well trained in this way.",
+                options: [
+                    { id: "A", text: "is accustomed to" },
+                    { id: "B", text: "is accustomed on" },
+                    { id: "C", text: "are accustomed on" },
+                    { id: "D", text: "are accustomed to" }
+                ],
+                correctAnswer: "D",
+                explanation: "① 固定搭配：be accustomed to（习惯于），介词只用to，排除B、C；\n② 主谓一致：主语journalists（记者）是复数，be动词用are，故选D。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 54,
+                text: "The situation between us is very challenging, but we have to learn how to handle the difficult situation ______ improving our relations.",
+                options: [
+                    { id: "A", text: "for the sake of" },
+                    { id: "B", text: "on behalf of" },
+                    { id: "C", text: "in case of" },
+                    { id: "D", text: "in the place of" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：for the sake of（为了……）；on behalf of（代表）；in case of（万一）；in the place of（代替）。我们处理难题是为了改善关系，故选A。"
+            },
+            {
+                unit: "Unit 3 课文第6题",
+                id: 55,
+                text: "The award-winning chef says that since he was young, he ______ Chinese food because of its rich ingredients and well-balanced nutrition.",
+                options: [
+                    { id: "A", text: "has a passion for" },
+                    { id: "B", text: "has had a passion for" },
+                    { id: "C", text: "had a passion for" },
+                    { id: "D", text: "had had a passion for" }
+                ],
+                correctAnswer: "B",
+                explanation: "语法考点：since+一般过去时（自从……以来），主句需用现在完成时，表示动作从过去持续到现在；have a passion for（热爱），故选B。"
+            },
+            
+            // Unit 4
+            {
+                unit: "Unit 4",
+                id: 56,
+                text: "According to medical doctors, if a patient's tumor is small, surgery is __________ performed to remove it.",
+                options: [
+                    { id: "A", text: "typically" },
+                    { id: "B", text: "resolutely" },
+                    { id: "C", text: "exceptionally" },
+                    { id: "D", text: "sufficiently" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：typically（通常，一般）；resolutely（坚决地）；exceptionally（反常地）；sufficiently（充分地）。句意：肿瘤较小时，通常会采用手术切除，故选A。"
+            },
+            {
+                unit: "Unit 4",
+                id: 57,
+                text: "These graduates brought deep-water ocean __________ technology to the region to help explore the areas.",
+                options: [
+                    { id: "A", text: "gap" },
+                    { id: "B", text: "survey" },
+                    { id: "C", text: "discipline" },
+                    { id: "D", text: "schedule" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：gap（差距）；survey（勘测，探测）；discipline（学科；纪律）；schedule（日程表）。ocean survey technology表示“海洋勘测技术”，符合海洋探索的语境，故选B。"
+            },
+            {
+                unit: "Unit 4",
+                id: 58,
+                text: "Here is my suggestion in terms of writing process: Before you start writing an essay, just jot down __________ ideas to do brainstorming.",
+                options: [
+                    { id: "A", text: "flexible" },
+                    { id: "B", text: "vigorous" },
+                    { id: "C", text: "random" },
+                    { id: "D", text: "elegant" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：flexible（灵活的）；vigorous（有力的）；random（随意的，零散的）；elegant（优雅的）。头脑风暴时会随手记下零散想法，故选C。"
+            },
+            {
+                unit: "Unit 4",
+                id: 59,
+                text: "It is important for athletes to have rigorous physical and technical training to __________ their performance in sports competitions.",
+                options: [
+                    { id: "A", text: "rejuvenate" },
+                    { id: "B", text: "fulfill" },
+                    { id: "C", text: "minimize" },
+                    { id: "D", text: "maximize" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：rejuvenate（使恢复活力）；fulfill（实现）；minimize（使最小化）；maximize（使最大化）。运动员训练是为了最大化赛场表现，故选D。"
+            },
+            {
+                unit: "Unit 4",
+                id: 60,
+                text: "After successful completion of these courses, students _______ the academic requirements for their undergraduate studies.",
+                options: [
+                    { id: "A", text: "had fulfilled" },
+                    { id: "B", text: "will have fulfilled" },
+                    { id: "C", text: "fulfilled" },
+                    { id: "D", text: "fulfill" }
+                ],
+                correctAnswer: "B",
+                explanation: "语法考点：after引导将来时间状语，主句用将来完成时（will have done），表示“在将来某个时间前已经完成动作”。句意：修完课程后，学生就将满足本科学业要求，故选B。"
+            },
+            {
+                unit: "Unit 4",
+                id: 61,
+                text: "Only three short straightforward words, but they were said so __________ that all the audience were impressed.",
+                options: [
+                    { id: "A", text: "repeatedly" },
+                    { id: "B", text: "remotely" },
+                    { id: "C", text: "resolutely" },
+                    { id: "D", text: "recently" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：repeatedly（反复地）；remotely（遥远地）；resolutely（坚定地）；recently（最近）。简短的话语说得坚定有力，打动了观众，故选C。"
+            },
+            {
+                unit: "Unit 4",
+                id: 62,
+                text: "This position would ideally suit candidates who have exposure to working on key __________ projects, preferably in the area of geophysics.",
+                options: [
+                    { id: "A", text: "massive" },
+                    { id: "B", text: "passionate" },
+                    { id: "C", text: "earnest" },
+                    { id: "D", text: "strategic" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：massive（巨大的）；passionate（热情的）；earnest（认真的）；strategic（战略的）。strategic projects为固定搭配“重点战略项目”，故选D。"
+            },
+            {
+                unit: "Unit 4",
+                id: 63,
+                text: "Internship, which gives you valuable work experience, can offer you a(n) __________ opportunity to be competitive in the job market.",
+                options: [
+                    { id: "A", text: "exceptional" },
+                    { id: "B", text: "exclusive" },
+                    { id: "C", text: "executive" },
+                    { id: "D", text: "explosive" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：exceptional（难得的，绝佳的）；exclusive（独家的）；executive（行政的）；explosive（爆炸性的）。实习是提升职场竞争力的绝佳机会，故选A。"
+            },
+            {
+                unit: "Unit 4",
+                id: 64,
+                text: "He understood that his __________ the dream was not for himself but for the people who had the same hopes and passions as him.",
+                options: [
+                    { id: "A", text: "condensing" },
+                    { id: "B", text: "recruiting" },
+                    { id: "C", text: "chasing" },
+                    { id: "D", text: "illustrating" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：condense（压缩）；recruit（招聘）；chase（追逐）；illustrate（说明）。chase the dream为固定搭配“追逐梦想”，故选C。"
+            },
+            {
+                unit: "Unit 4",
+                id: 65,
+                text: "He gave us very __________ instructions on how to handle the new machine, so we all understood what he meant.",
+                options: [
+                    { id: "A", text: "expansive" },
+                    { id: "B", text: "explanatory" },
+                    { id: "C", text: "extinct" },
+                    { id: "D", text: "explicit" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：expansive（广阔的）；explanatory（解释性的）；extinct（灭绝的）；explicit（清晰明确的）。指令清晰易懂，大家才能明白操作方法，故选D。"
+            },
+            {
+                unit: "Unit 4",
+                id: 66,
+                text: "When I was traveling in China, I would ride my bike slowly, take pictures of the things that __________, and talk to people.",
+                options: [
+                    { id: "A", text: "tapped into" },
+                    { id: "B", text: "distinguished between" },
+                    { id: "C", text: "picked his brains" },
+                    { id: "D", text: "caught my eye" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：tap into（挖掘）；distinguish between（区分）；pick his brains（请教他人）；catch one's eye（吸引某人目光）。旅行时会拍摄吸引自己的景物，故选D。"
+            },
+            {
+                unit: "Unit 4",
+                id: 67,
+                text: "As a senior assistant in the lab for quite a few years, I was thrilled to __________ teach lab techniques to the new students.",
+                options: [
+                    { id: "A", text: "be obsessed with" },
+                    { id: "B", text: "be based on" },
+                    { id: "C", text: "be entrusted to" },
+                    { id: "D", text: "be entitled to" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：be obsessed with（痴迷）；be based on（基于）；be entrusted to（被委托做某事）；be entitled to（有权做某事）。我被委托教新生实验技能，感到很开心，故选C。"
+            },
+            {
+                unit: "Unit 4",
+                id: 68,
+                text: "It was raining heavily, so she spent the whole afternoon __________ in her dorm room and reading.",
+                options: [
+                    { id: "A", text: "to hole up" },
+                    { id: "B", text: "holing up" },
+                    { id: "C", text: "hole up" },
+                    { id: "D", text: "holed up" }
+                ],
+                correctAnswer: "B",
+                explanation: "语法考点：固定句型spend time (in) doing sth.（花费时间做某事），后接动名词；hole up表示“待在室内、躲避”，故选B。"
+            },
+            {
+                unit: "Unit 4",
+                id: 69,
+                text: "We will build a closer partnership and __________ high-quality cooperation under the Belt and Road Initiative.",
+                options: [
+                    { id: "A", text: "remain committed to" },
+                    { id: "B", text: "lose interest in" },
+                    { id: "C", text: "strive for" },
+                    { id: "D", text: "focus on" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：remain committed to（始终致力于）；lose interest in（失去兴趣）；strive for（争取）；focus on（专注于）。句意：我们将持续致力于高质量合作，故选A。"
+            },
+            {
+                unit: "Unit 4",
+                id: 70,
+                text: "I went back to school to get my coaching certification, and my efforts and persistence __________ in the end.",
+                options: [
+                    { id: "A", text: "invested with" },
+                    { id: "B", text: "majored in" },
+                    { id: "C", text: "paid off" },
+                    { id: "D", text: "settled for" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：invest with（赋予）；major in（主修）；pay off（（努力）得到回报）；settle for（勉强接受）。我的付出最终有了回报，故选C。"
+            },
+            {
+                unit: "Unit 4",
+                id: 71,
+                text: "She joined the lab as a summer student and then __________ to complete her fourth-year honors thesis before graduation.",
+                options: [
+                    { id: "A", text: "focused on" },
+                    { id: "B", text: "stayed on" },
+                    { id: "C", text: "speculated on" },
+                    { id: "D", text: "tried on" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：focus on（专注）；stay on（继续留下）；speculate on（推测）；try on（试穿）。她暑期进入实验室，之后继续留在这里完成毕业论文，故选B。"
+            },
+            {
+                unit: "Unit 4",
+                id: 72,
+                text: "The traditions that __________ from generation to generation will surely enrich our culture and be carried forward.",
+                options: [
+                    { id: "A", text: "are passed down" },
+                    { id: "B", text: "are fallen apart" },
+                    { id: "C", text: "are featured in" },
+                    { id: "D", text: "are saddled with" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：be passed down（被传承）；fall apart（崩溃）；be featured in（被刊登/展示）；be saddled with（背负）。传统代代相传，故选A。"
+            },
+            {
+                unit: "Unit 4",
+                id: 73,
+                text: "To fight against the common health crisis, China has made great efforts to help other countries __________ medicines.",
+                options: [
+                    { id: "A", text: "in urgent search of" },
+                    { id: "B", text: "in urgent favour of" },
+                    { id: "C", text: "in urgent charge of" },
+                    { id: "D", text: "in urgent need of" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：in urgent search of（紧急寻找）；in urgent favour of（紧急支持）；in urgent charge of（紧急负责）；in urgent need of（急需）。中国帮助急需药品的国家应对危机，故选D。"
+            },
+            
+            // Unit 5
+            {
+                unit: "Unit 5",
+                id: 74,
+                text: "The __________ of the \"upright\" message is to ask people to save, while the \"permissive\" message asks people to spend.",
+                options: [
+                    { id: "A", text: "recession" },
+                    { id: "B", text: "discipline" },
+                    { id: "C", text: "exaggeration" },
+                    { id: "D", text: "objective" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：recession（经济衰退）；discipline（纪律）；exaggeration（夸张）；objective（目标，目的）。这句话介绍两种宣传口号的目的，故选D。"
+            },
+            {
+                unit: "Unit 5",
+                id: 75,
+                text: "If you find yourself in a(n) __________ about what is the right decision for your career, speak to a career counselor.",
+                options: [
+                    { id: "A", text: "destruction" },
+                    { id: "B", text: "distress" },
+                    { id: "C", text: "dilemma" },
+                    { id: "D", text: "deficit" }
+                ],
+                correctAnswer: "C",
+                explanation: "固定搭配：in a dilemma 为固定短语，意为“陷入两难境地”；destruction（破坏）；distress（痛苦）；deficit（赤字）。职业选择犹豫不决时可以咨询顾问，故选C。"
+            },
+            {
+                unit: "Unit 5",
+                id: 76,
+                text: "It is important for parents to listen to their children's opinion because they may have a very different __________ on the things they've seen.",
+                options: [
+                    { id: "A", text: "proficiency" },
+                    { id: "B", text: "perspective" },
+                    { id: "C", text: "perseverance" },
+                    { id: "D", text: "permission" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：proficiency（熟练度）；perspective（观点，视角）；perseverance（毅力）；permission（许可）。孩子和大人看待事物的视角不同，故选B。"
+            },
+            {
+                unit: "Unit 5",
+                id: 77,
+                text: "To cater for the different tastes of athletes from all over the world, the organizers of the Beijing Winter Olympics prepared __________ dishes.",
+                options: [
+                    { id: "A", text: "diverse" },
+                    { id: "B", text: "artistic" },
+                    { id: "C", text: "allergic" },
+                    { id: "D", text: "jerky" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：diverse（多样的）；artistic（艺术的）；allergic（过敏的）；jerky（肉干）。为满足各国运动员口味，准备了多样化菜品，故选A。"
+            },
+            {
+                unit: "Unit 5",
+                id: 78,
+                text: "If you want to save money for a rainy day, making a(n) __________ is the first step you may want to take because it gives you a clear plan.",
+                options: [
+                    { id: "A", text: "budget" },
+                    { id: "B", text: "scandal" },
+                    { id: "C", text: "penalty" },
+                    { id: "D", text: "anniversary" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：budget（预算）；scandal（丑闻）；penalty（惩罚）；anniversary（纪念日）。make a budget（制定预算）是存钱的第一步，故选A。"
+            },
+            {
+                unit: "Unit 5",
+                id: 79,
+                text: "The Chinese legend goes that Yue Fei's mother tattooed four Chinese characters on his back to remind him of the importance of __________ to the nation.",
+                options: [
+                    { id: "A", text: "survey" },
+                    { id: "B", text: "loyalty" },
+                    { id: "C", text: "innovation" },
+                    { id: "D", text: "option" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：survey（调查）；loyalty（忠诚）；innovation（创新）；option（选择）。结合“岳母刺字”的典故，此处指对国家的忠诚，故选B。"
+            },
+            {
+                unit: "Unit 5",
+                id: 80,
+                text: "When children are addicted to online games, they would often __________ their parents and stay online for hours every day.",
+                options: [
+                    { id: "A", text: "defend" },
+                    { id: "B", text: "defeat" },
+                    { id: "C", text: "defy" },
+                    { id: "D", text: "define" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：defend（保卫）；defeat（击败）；defy（违抗，不听从）；define（定义）。沉迷网游的孩子常会违抗父母管束，故选C。"
+            },
+            {
+                unit: "Unit 5",
+                id: 81,
+                text: "The report goes on to __________ the technicians to take a more active role in developing the standards of artificial intelligence.",
+                options: [
+                    { id: "A", text: "endure" },
+                    { id: "B", text: "grab" },
+                    { id: "C", text: "boom" },
+                    { id: "D", text: "urge" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：endure（忍受）；grab（抓住）；boom（繁荣）；urge（敦促，呼吁）。urge sb. to do sth.（敦促某人做某事），报告呼吁技术人员积极参与标准制定，故选D。"
+            },
+            {
+                unit: "Unit 5",
+                id: 82,
+                text: "Many people have no defense against advertising techniques and are often __________ into buying certain products they don't need.",
+                options: [
+                    { id: "A", text: "to manipulate" },
+                    { id: "B", text: "manipulated" },
+                    { id: "C", text: "manipulating" },
+                    { id: "D", text: "manipulate" }
+                ],
+                correctAnswer: "B",
+                explanation: "语法考点：people和manipulate（操控）是被动关系，使用被动语态be manipulated into doing sth.（被操控做某事），故选B。"
+            },
+            {
+                unit: "Unit 5",
+                id: 83,
+                text: "The organization has been working with local authorities and officials to __________ the problem of climate change.",
+                options: [
+                    { id: "A", text: "urge" },
+                    { id: "B", text: "assign" },
+                    { id: "C", text: "tackle" },
+                    { id: "D", text: "hesitate" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：urge（敦促）；assign（分配）；tackle（解决，处理）；hesitate（犹豫）。tackle the problem为固定搭配“解决问题”，故选C。"
+            },
+            {
+                unit: "Unit 5",
+                id: 84,
+                text: "My friend planned to travel to Europe in August, but I advised him to __________ going till October when the weather is cooler.",
+                options: [
+                    { id: "A", text: "put off" },
+                    { id: "B", text: "put away" },
+                    { id: "C", text: "put up" },
+                    { id: "D", text: "put on" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：put off（推迟）；put away（收好）；put up（张贴；留宿）；put on（穿上；上演）。我建议朋友推迟出行时间，故选A。"
+            },
+            {
+                unit: "Unit 5",
+                id: 85,
+                text: "The evidence obtained by the police was __________ the statement he provided but consistent with what the witness described.",
+                options: [
+                    { id: "A", text: "fresh from" },
+                    { id: "B", text: "at odds with" },
+                    { id: "C", text: "in awe" },
+                    { id: "D", text: "for the sake of" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：fresh from（刚从……来）；at odds with（与……不一致）；in awe（惊叹）；for the sake of（为了）。证据和他的供述相互矛盾，和证人描述一致，故选B。"
+            },
+            {
+                unit: "Unit 5",
+                id: 86,
+                text: "To __________ its steady economic performance, China will work hard to ensure the supply of commodities and keep their prices stable.",
+                options: [
+                    { id: "A", text: "strive for" },
+                    { id: "B", text: "get serious about" },
+                    { id: "C", text: "retain control over" },
+                    { id: "D", text: "profit from" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：strive for（争取）；get serious about（认真对待）；retain control over（把控、维持）；profit from（从……获利）。中国采取举措维持经济平稳运行，故选C。"
+            },
+            {
+                unit: "Unit 5",
+                id: 87,
+                text: "The working team is well trained, so it has the ability to see, analyze, and react to issues before they __________.",
+                options: [
+                    { id: "A", text: "catch their eye" },
+                    { id: "B", text: "stay on track" },
+                    { id: "C", text: "pick their brains" },
+                    { id: "D", text: "spin out of control" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：catch their eye（吸引目光）；stay on track（步入正轨）；pick their brains（请教）；spin out of control（失控）。团队能在问题失控前及时处理，故选D。"
+            },
+            {
+                unit: "Unit 5",
+                id: 88,
+                text: "Both experts and teachers say that children tend to __________ when they see their parents making similar efforts.",
+                options: [
+                    { id: "A", text: "go downhill" },
+                    { id: "B", text: "get in their way" },
+                    { id: "C", text: "miss the key window" },
+                    { id: "D", text: "do their utmost" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：go downhill（走下坡路）；get in their way（阻碍）；miss the key window（错过良机）；do their utmost（竭尽全力）。父母以身作则，孩子也会努力上进，故选D。"
+            },
+            {
+                unit: "Unit 5",
+                id: 89,
+                text: "As she entered the most dynamic period of her career, Kylie __________ her success and the impact of her college education.",
+                options: [
+                    { id: "A", text: "became attracted to" },
+                    { id: "B", text: "were serious about" },
+                    { id: "C", text: "took stock of" },
+                    { id: "D", text: "spoke of" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：be attracted to（被吸引）；be serious about（认真对待）；take stock of（反思，总结）；speak of（谈及）。职业生涯黄金期，她开始总结自身经历与收获，故选C。"
+            },
+            {
+                unit: "Unit 5",
+                id: 90,
+                text: "The chief executive is confident that current growth levels can be maintained since all the development projects __________.",
+                options: [
+                    { id: "A", text: "were to stay on track" },
+                    { id: "B", text: "have stayed on track" },
+                    { id: "C", text: "stay on track" },
+                    { id: "D", text: "had stayed on track" }
+                ],
+                correctAnswer: "B",
+                explanation: "语法考点：since引导原因状语从句，强调动作已经完成并对现在造成影响，用现在完成时；stay on track（步入正轨），故选B。"
+            },
+            {
+                unit: "Unit 5",
+                id: 91,
+                text: "It is very important for students to understand and __________ new information; besides, they should judge the information carefully.",
+                options: [
+                    { id: "A", text: "take in" },
+                    { id: "B", text: "take off" },
+                    { id: "C", text: "take over" },
+                    { id: "D", text: "take up" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：take in（理解，吸收）；take off（起飞；脱下）；take over（接管）；take up（开始从事；占据）。学生需要理解并吸收新知识，故选A。"
+            },
+            
+            // Unit 6
+            {
+                unit: "Unit 6",
+                id: 92,
+                text: "People participating in problem-solving activities are often willing to __________ their methods to work out solutions.",
+                options: [
+                    { id: "A", text: "mobilize" },
+                    { id: "B", text: "manipulate" },
+                    { id: "C", text: "modify" },
+                    { id: "D", text: "maximize" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：mobilize（动员）；manipulate（操控）；modify（调整，修改）；maximize（最大化）。解决问题时，人们会调整方法寻找方案，故选C。"
+            },
+            {
+                unit: "Unit 6",
+                id: 93,
+                text: "We are two neighboring countries, and we shouldn't be __________, or a threat to each other, but partners.",
+                options: [
+                    { id: "A", text: "counselors" },
+                    { id: "B", text: "sectors" },
+                    { id: "C", text: "partners" },
+                    { id: "D", text: "rivals" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：counselors（顾问）；sectors（行业）；partners（伙伴）；rivals（对手）。句意：邻国不应互为对手，而应成为伙伴，故选D。"
+            },
+            {
+                unit: "Unit 6",
+                id: 94,
+                text: "The film __________ its position as the critics' favorite so far for its surprising and inspiring plot.",
+                options: [
+                    { id: "A", text: "has maintained" },
+                    { id: "B", text: "has urged" },
+                    { id: "C", text: "has chased" },
+                    { id: "D", text: "has assigned" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：maintain（保持，维持）；urge（敦促）；chase（追逐）；assign（分配）。这部电影一直稳居影评人最爱榜单，故选A。"
+            },
+            {
+                unit: "Unit 6",
+                id: 95,
+                text: "Though many things have changed in our culture, our commitment and sense of responsibility have never been __________.",
+                options: [
+                    { id: "A", text: "undertaken" },
+                    { id: "B", text: "discarded" },
+                    { id: "C", text: "calculated" },
+                    { id: "D", text: "proclaimed" }
+                ],
+                correctAnswer: "B",
+                explanation: "词义辨析：undertake（承担）；discard（抛弃，丢弃）；calculate（计算）；proclaim（宣布）。时代变迁，但初心与责任感从未被抛弃，故选B。"
+            },
+            {
+                unit: "Unit 6",
+                id: 96,
+                text: "The Act primarily attempts to add criminal __________ against using the Internet to do anything illegal or unlawful.",
+                options: [
+                    { id: "A", text: "prohibitions" },
+                    { id: "B", text: "scandals" },
+                    { id: "C", text: "barriers" },
+                    { id: "D", text: "versions" }
+                ],
+                correctAnswer: "A",
+                explanation: "词义辨析：prohibitions（禁令，禁止条款）；scandals（丑闻）；barriers（障碍）；versions（版本）。该法案增设针对网络违法行为的刑事禁令，故选A。"
+            },
+            {
+                unit: "Unit 6",
+                id: 97,
+                text: "He's been obsessed with the idea that we are __________ against him, but actually we have been treating him fairly.",
+                options: [
+                    { id: "A", text: "respective" },
+                    { id: "B", text: "prejudiced" },
+                    { id: "C", text: "compact" },
+                    { id: "D", text: "innovative" }
+                ],
+                correctAnswer: "B",
+                explanation: "固定搭配：be prejudiced against sb.（对某人有偏见）；respective（各自的）；compact（紧凑的）；innovative（创新的）。他误以为大家对他有偏见，故选B。"
+            },
+            {
+                unit: "Unit 6",
+                id: 98,
+                text: "The doctor says that the regular use of this device can help with sleeping disorders, and healthy sleep patterns can be __________ eventually.",
+                options: [
+                    { id: "A", text: "restrained" },
+                    { id: "B", text: "restricted" },
+                    { id: "C", text: "restored" },
+                    { id: "D", text: "resumed" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：restrain（抑制）；restrict（限制）；restore（恢复）；resume（重新开始）。仪器可以帮助患者恢复健康的睡眠作息，故选C。"
+            },
+            {
+                unit: "Unit 6",
+                id: 99,
+                text: "Studying the humanities has been enjoyable and __________, providing me with a new and different perspective on the world.",
+                options: [
+                    { id: "A", text: "overwhelming" },
+                    { id: "B", text: "enduring" },
+                    { id: "C", text: "persevering" },
+                    { id: "D", text: "enlightening" }
+                ],
+                correctAnswer: "D",
+                explanation: "词义辨析：overwhelming（压倒性的）；enduring（持久的）；persevering（坚持不懈的）；enlightening（富有启发性的）。人文学科能启迪思想、开拓视野，故选D。"
+            },
+            {
+                unit: "Unit 6",
+                id: 100,
+                text: "We should stay committed to openness, __________ all barriers to the development of productivity, and steer globalization in the right direction.",
+                options: [
+                    { id: "A", text: "recruit" },
+                    { id: "B", text: "browse" },
+                    { id: "C", text: "eliminate" },
+                    { id: "D", text: "proclaim" }
+                ],
+                correctAnswer: "C",
+                explanation: "词义辨析：recruit（招聘）；browse（浏览）；eliminate（消除，破除）；proclaim（宣布）。eliminate barriers（破除障碍），句意：破除阻碍生产力发展的壁垒，故选C。"
+            },
+            {
+                unit: "Unit 6",
+                id: 101,
+                text: "The cell phone has become an important part of our life, and we __________ it so much that we carry it anywhere we go.",
+                options: [
+                    { id: "A", text: "are embedded in" },
+                    { id: "B", text: "are obsessed with" },
+                    { id: "C", text: "are based on" },
+                    { id: "D", text: "are attached to" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：be embedded in（嵌入）；be obsessed with（痴迷于）；be based on（基于）；be attached to（依恋，喜爱）。我们对手机十分依赖、形影不离，故选D。"
+            },
+            {
+                unit: "Unit 6",
+                id: 102,
+                text: "The support our volunteers provide to the community and society cannot __________ purely practical terms.",
+                options: [
+                    { id: "A", text: "be passionate about" },
+                    { id: "B", text: "be measured in" },
+                    { id: "C", text: "be equipped with" },
+                    { id: "D", text: "be obliged to" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：be passionate about（热爱）；be measured in（用……衡量）；be equipped with（配备）；be obliged to（有义务）。志愿者的奉献无法单纯用物质标准衡量，故选B。"
+            },
+            {
+                unit: "Unit 6",
+                id: 103,
+                text: "Please don't forget the Tourist Guide, which should __________ when you travel to different places in Asia and Europe.",
+                options: [
+                    { id: "A", text: "race against time" },
+                    { id: "B", text: "stay on track" },
+                    { id: "C", text: "come in handy" },
+                    { id: "D", text: "get out of control" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：race against time（与时间赛跑）；stay on track（步入正轨）；come in handy（派上用场）；get out of control（失控）。旅行时旅游指南会派上用场，故选C。"
+            },
+            {
+                unit: "Unit 6",
+                id: 104,
+                text: "I can't believe you left the oven on! It's too dangerous since the house might __________.",
+                options: [
+                    { id: "A", text: "go up in flames" },
+                    { id: "B", text: "spin out of control" },
+                    { id: "C", text: "come in handy" },
+                    { id: "D", text: "go downhill" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：go up in flames（起火，烧毁）；spin out of control（失控）；come in handy（派上用场）；go downhill（走下坡路）。烤箱未关闭容易引发火灾，故选A。"
+            },
+            {
+                unit: "Unit 6",
+                id: 105,
+                text: "I think students would __________ or miss many opportunities if they don't try hard and don't acquire the knowledge taught at college.",
+                options: [
+                    { id: "A", text: "take a break" },
+                    { id: "B", text: "pay a big price" },
+                    { id: "C", text: "give way" },
+                    { id: "D", text: "have a passion" }
+                ],
+                correctAnswer: "B",
+                explanation: "短语辨析：take a break（休息）；pay a big price（付出沉重代价）；give way（让步）；have a passion（热爱）。荒废学业会让学生付出代价、错失机遇，故选B。"
+            },
+            {
+                unit: "Unit 6",
+                id: 106,
+                text: "If you __________ travel and trying to adjust to a new time zone, you may not be ready to face the challenge of the new environment yet.",
+                options: [
+                    { id: "A", text: "are exhausted from" },
+                    { id: "B", text: "are tapped into" },
+                    { id: "C", text: "are speculated about" },
+                    { id: "D", text: "are focused on" }
+                ],
+                correctAnswer: "A",
+                explanation: "短语辨析：be exhausted from（因……疲惫不堪）；be tapped into（被挖掘）；be speculated about（被猜测）；be focused on（专注于）。旅途和倒时差会让人身心疲惫，故选A。"
+            },
+            {
+                unit: "Unit 6",
+                id: 107,
+                text: "Though they are not discussed in this particular article, these topics __________ other articles and publications.",
+                options: [
+                    { id: "A", text: "are appealed to" },
+                    { id: "B", text: "are looked upon as" },
+                    { id: "C", text: "are featured in" },
+                    { id: "D", text: "are nailed down" }
+                ],
+                correctAnswer: "C",
+                explanation: "短语辨析：be appealed to（被呼吁）；be looked upon as（被视作）；be featured in（被刊载、出现于）；be nailed down（被确定）。这些话题出现在其他刊物中，故选C。"
+            },
+            {
+                unit: "Unit 6",
+                id: 108,
+                text: "Class discussions next week will __________ the importance of love, communication, and a close relationship between parents and their children.",
+                options: [
+                    { id: "A", text: "strive for" },
+                    { id: "B", text: "major in" },
+                    { id: "C", text: "distinguish between" },
+                    { id: "D", text: "revolve around" }
+                ],
+                correctAnswer: "D",
+                explanation: "短语辨析：strive for（争取）；major in（主修）；distinguish between（区分）；revolve around（围绕……展开）。课堂讨论将围绕亲子关系展开，故选D。"
+            }
+        ];
+
+        // 当前题目索引
+        let currentQuestionIndex = 0;
+        // 用户答案记录
+        let userAnswers = {};
+        // 是否已回答当前题目
+        let hasAnswered = false;
+
+        // DOM元素
+        const questionUnitEl = document.getElementById('question-unit');
+        const questionNumberEl = document.getElementById('question-number');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const answerFeedbackEl = document.getElementById('answer-feedback');
+        const correctAnswerEl = document.getElementById('correct-answer');
+        const explanationTextEl = document.getElementById('explanation-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // 初始化页面
+        function init() {
+            renderQuestion();
+            updateNavigationButtons();
+            
+            // 上一题按钮点击事件
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    hasAnswered = !!userAnswers[currentQuestionIndex];
+                    renderQuestion();
+                    updateNavigationButtons();
+                }
+            });
+            
+            // 下一题按钮点击事件
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    hasAnswered = !!userAnswers[currentQuestionIndex];
+                    renderQuestion();
+                    updateNavigationButtons();
+                }
+            });
+        }
+
+        // 渲染当前题目
+        function renderQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // 更新单元信息、题号和题目内容
+            questionUnitEl.textContent = question.unit;
+            questionNumberEl.textContent = `${question.id}. `;
+            questionTextEl.textContent = question.text;
+            
+            // 清空选项容器
+            optionsContainerEl.innerHTML = '';
+            
+            // 渲染选项
+            question.options.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option border border-neutral-200 rounded-lg p-4 flex items-center cursor-pointer option-hover';
+                optionEl.dataset.optionId = option.id;
+                
+                const optionText = document.createElement('span');
+                optionText.className = 'text-[clamp(1rem,2.5vw,1.125rem)]';
+                optionText.textContent = `${option.id}  ${option.text}`;
+                
+                optionEl.appendChild(optionText);
+                
+                // 如果已经回答，显示结果
+                if (hasAnswered) {
+                    const userAnswer = userAnswers[currentQuestionIndex];
+                    
+                    if (option.id === question.correctAnswer) {
+                        // 正确答案
+                        optionEl.classList.remove('border-neutral-200', 'hover:bg-neutral-100');
+                        optionEl.classList.add('border-correct', 'bg-correct/10');
+                        
+                        const checkIcon = document.createElement('i');
+                        checkIcon.className = 'fa fa-check text-correct text-xl mr-3';
+                        optionEl.insertBefore(checkIcon, optionText);
+                    } else if (option.id === userAnswer && userAnswer !== question.correctAnswer) {
+                        // 用户选错的答案
+                        optionEl.classList.remove('border-neutral-200', 'hover:bg-neutral-100');
+                        optionEl.classList.add('border-incorrect', 'bg-incorrect/10');
+                        
+                        const timesIcon = document.createElement('i');
+                        timesIcon.className = 'fa fa-times text-incorrect text-xl mr-3';
+                        optionEl.insertBefore(timesIcon, optionText);
+                    }
+                    
+                    // 已回答的题目不能再点击
+                    optionEl.classList.remove('cursor-pointer', 'option-hover');
+                    optionEl.style.pointerEvents = 'none';
+                } else {
+                    // 未回答的题目添加点击事件
+                    optionEl.addEventListener('click', () => handleOptionClick(option.id));
+                }
+                
+                optionsContainerEl.appendChild(optionEl);
+            });
+            
+            // 显示答案反馈（如果已回答）
+            if (hasAnswered) {
+                showAnswerFeedback();
+            } else {
+                hideAnswerFeedback();
+            }
+        }
+
+        // 处理选项点击
+        function handleOptionClick(selectedOptionId) {
+            if (hasAnswered) return;
+            
+            hasAnswered = true;
+            userAnswers[currentQuestionIndex] = selectedOptionId;
+            
+            // 重新渲染题目以显示结果
+            renderQuestion();
+        }
+
+        // 显示答案反馈
+        function showAnswerFeedback() {
+            const question = questions[currentQuestionIndex];
+            const userAnswer = userAnswers[currentQuestionIndex];
+            
+            correctAnswerEl.innerHTML = `正确答案 <span class="font-medium">${question.correctAnswer}</span>，我的答案 <span class="${userAnswer === question.correctAnswer ? 'text-correct' : 'text-incorrect'} font-medium">${userAnswer}</span>`;
+            explanationTextEl.textContent = question.explanation;
+            
+            answerFeedbackEl.classList.remove('hidden');
+            // 添加淡入动画
+            answerFeedbackEl.classList.add('animate-fadeIn');
+        }
+
+        // 隐藏答案反馈
+        function hideAnswerFeedback() {
+            answerFeedbackEl.classList.add('hidden');
+            answerFeedbackEl.classList.remove('animate-fadeIn');
+        }
+
+        // 更新导航按钮状态
+        function updateNavigationButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+            
+            // 更新下一题按钮文本
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.innerHTML = '完成 <i class="fa fa-check ml-1"></i>';
+            } else {
+                nextBtn.innerHTML = '下一题 <i class="fa fa-chevron-right ml-1"></i>';
+            }
+        }
+
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fadeIn {
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 启动应用
+        init();
+    </script>
+</body>
+</html>
